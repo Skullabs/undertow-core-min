@@ -1,0 +1,8 @@
+output
+target
+.idea
+*.jar
+*.iml
+.classpath
+.project
+.settings

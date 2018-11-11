@@ -1,0 +1,38 @@
+modelVersion: 4.0.0
+
+parent:
+  groupId: io.skullabs.boilerplates
+  artifactId: java-8
+  version: 1.0.0
+
+groupId: io.skullabs.undertow
+artifactId: undertow-core-min
+version: "2.0.15.Alpha1"
+packaging: jar
+
+properties:
+  version.undertow: "2.0.15.Final"
+  version.xnio: "3.3.8.Final"
+
+dependencies:
+ # configuring Spring Beans
+ - { groupId: io.undertow, artifactId: undertow-core, version: "${version.undertow}" }
+ - { groupId: org.jboss.xnio, artifactId: xnio-nio, version: "${version.xnio}" }
+
+build:
+  plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-shade-plugin
+      version: 3.2.0
+      configuration:
+        createDependencyReducedPom: true
+        dependencyReducedPomLocation: "${basedir}/output/pom-reduced.xml"
+        minimizeJar: true
+        transformers:
+          org.apache.maven.plugins.shade.resource.ManifestResourceTransformer:
+            manifestEntries:
+              Main-Class: undertow.min.Main
+      executions:
+        - id: shade
+          phase: install
+          goals: ["shade"]
